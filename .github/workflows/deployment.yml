@@ -7,6 +7,7 @@ on:
 
 jobs:
 
+
   deploy:
     runs-on: ubuntu-latest
 
@@ -33,4 +34,5 @@ jobs:
 
     - name: Validate Deployment
       run: az webapp show --name MyLibraryManagementAPI --resource-group Software_Engineering
+
 
