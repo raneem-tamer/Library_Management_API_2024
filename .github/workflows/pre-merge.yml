@@ -1,0 +1,30 @@
+name: Pre-Merge Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+
+    - name: Lint Code
+      run: flake8 .
+
+    - name: Run Tests
+      run: pytest
+
