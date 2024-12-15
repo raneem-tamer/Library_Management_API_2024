@@ -6,21 +6,29 @@ on:
       - deploy
 
 jobs:
-  deploy:
+  deploy-to-azure:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Azure CLI
-        uses: azure/setup-azure-cli@v2
-
       - name: Log in to Azure
-        run: az login
+        run: |
+          az login --service-principal \
+                   --username ${{ secrets.AZURE_CLIENT_ID }} \
+                   --password ${{ secrets.AZURE_CLIENT_SECRET }} \
+                   --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Set Azure Subscription
+        run: az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure
         run: |
-          az webapp up --name MyLibraryManagementAPI --resource-group Software_Engineering --sku F1 --runtime "PYTHON:3.8"
+          az webapp up --name MyLibraryManagementAPI \
+                       --resource-group Software_Engineering \
+                       --sku F1 \
+                       --runtime "PYTHON:3.9"
 
       - name: Validate Deployment
         run: |
